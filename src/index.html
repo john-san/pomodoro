@@ -9,20 +9,23 @@
     <div class="container">
       <h1 class="text-center">Pomodoro Clock</h1>
 
-      <div class="row" id="session-controls">
-        <div class="col-md-5">
+      <div class="row">
+        <div class="col-md-5" id="session-controls">
           <h3 class="text-center">Session</h3>
           <div class="text-center">
-            <span class="float-left"><i class="fas fa-chevron-circle-down"></i></span> <span>25</span> <span class="float-right"><i class="fas fa-chevron-circle-up"></i></span>
+            <span class="float-left"><i class="fas fa-chevron-circle-down"></i></span> <span id="session-time-holder">25</span> <span class="float-right"><i class="fas fa-chevron-circle-up"></i></span>
           </div>
         </div>
 
         <div class="col-md-5 offset-md-2">
+          <div id="break-controls">
             <h3 class="text-center">Break</h3>
             <div class="text-center">
-              <span class="float-left"><i class="fas fa-chevron-circle-down"></i></span> <span>5</span> <span class="float-right"><i class="fas fa-chevron-circle-up"></i></span>
+              <span class="float-left"><i class="fas fa-chevron-circle-down"></i></span> <span id="break-time-holder">5</span> <span class="float-right"><i class="fas fa-chevron-circle-up"></i></span>
             </div>
           </div>
+        </div>
+
       </div>
 
       <div id ="player-controls" class="mt-5">
