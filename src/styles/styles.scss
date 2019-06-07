@@ -1,20 +1,17 @@
-@media (min-width: 768px) {
-  .container {
-    max-width: 500px;
-  }
+#session-and-break-controls {
+  max-width: 325px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 body {
   font-size: 18px;
 }
 i {
-  font-size: 24px;
+  font-size: 30px;
   cursor: pointer;
 }
 
-#session-controls, #player-controls {
-  
-}
 
 #player-controls {
   max-width: 325px;
@@ -22,5 +19,17 @@ i {
   margin-right: auto;
   i {
     font-size: 42px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 500px;
+  }
+
+  #session-and-break-controls {
+    max-width: unset;
+    margin-left: unset;
+    margin-right: unset;
   }
 }

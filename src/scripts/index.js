@@ -15,48 +15,54 @@ const player = {
     "seconds": 0
   },
   isPlaying: false,
+  onBreak: false,
   interval: undefined
 }
+
+const sessionType = document.querySelector("#session-type");
 
 // SessionTime Controls
 const sessionDown = document.querySelector("#session-controls i.fa-chevron-circle-down");
 const sessionUp = document.querySelector("#session-controls i.fa-chevron-circle-up");
 const sessionTimeHolder = document.querySelector("#session-time-holder");
 
-function updateSessionTimeText() {
+player.updateSessionAndPlayerTime = () => {
   sessionTimeHolder.innerText = player.sessionTime;
   player.time.minutes = player.sessionTime;
   player.time.seconds = 0;
   player.updatePlayerTime();
 }
 
-function incrementSessionTime() {
+player.updatePlayerTime = () => {
+  let displayTime = addPadding(player.time.minutes) + ":" + addPadding(player.time.seconds);
+  playerTimeHolder.innerText = displayTime;
+}
+
+player.incrementSessionTime = () => {
   if (player.isPlaying == false) {
     player.sessionTime++;
-    updateSessionTimeText();
+    player.updateSessionAndPlayerTime();
     console.log(`player.sessionTime Incremented: ${player.sessionTime}`);
   }
 }
 
-function decrementSessionTime() {
+player.decrementSessionTime = () => {
   if (player.sessionTime > 1 && player.isPlaying == false) {
     player.sessionTime--;
-    updateSessionTimeText();
+    player.updateSessionAndPlayerTime();
     console.log(`player.sessionTime Decremented: ${player.sessionTime}`);
   }
 }
 
-sessionUp.addEventListener("click", incrementSessionTime);
-
-sessionDown.addEventListener("click", decrementSessionTime);
+sessionUp.addEventListener("click", player.incrementSessionTime);
+sessionDown.addEventListener("click", player.decrementSessionTime);
 
 // BreakTime Controls
 const breakDown = document.querySelector("#break-controls i.fa-chevron-circle-down");
 const breakUp = document.querySelector("#break-controls i.fa-chevron-circle-up");
 const breakTimeHolder = document.querySelector("#break-time-holder");
 
-
-function incrementBreakTime() {
+player.incrementBreakTime = () => {
   if (player.isPlaying == false) {
     player.breakTime++;
     breakTimeHolder.innerText = player.breakTime;
@@ -64,7 +70,7 @@ function incrementBreakTime() {
   }
 }
 
-function decrementBreakTime() {
+player.decrementBreakTime = () => {
   if (player.breakTime > 1 && player.isPlaying == false) {
     player.breakTime--;
     breakTimeHolder.innerText = player.breakTime;
@@ -72,9 +78,8 @@ function decrementBreakTime() {
   }
 }
 
-breakUp.addEventListener("click", incrementBreakTime);
-
-breakDown.addEventListener("click", decrementBreakTime);
+breakUp.addEventListener("click", player.incrementBreakTime);
+breakDown.addEventListener("click", player.decrementBreakTime);
 
 // Player Controls
 const playerTimeHolder = document.querySelector("#player-time-holder");
@@ -83,12 +88,10 @@ const pauseBtn = document.querySelector("#pauseBtn");
 const stopBtn = document.querySelector("#stopBtn");
 const resetBtn = document.querySelector("#resetBtn");
 
-player.updatePlayerTime = function() {
-  let displayTime = addPadding(player.time.minutes) + ":" + addPadding(player.time.seconds);
-  playerTimeHolder.innerText = displayTime;
-}
 
-function resetPlayer() {
+
+player.reset = () => {
+  console.dir(player);
   player.isPlaying = false;
   player.sessionTime = 25;
   player.breakTime = 5;
@@ -97,12 +100,12 @@ function resetPlayer() {
     clearInterval(player.interval);
   }
 
-  updateSessionTimeText();
+  player.updateSessionAndPlayerTime();
   breakTimeHolder.innerText = player.breakTime;
   console.log("reset");
 }
 
-resetBtn.addEventListener("click", resetPlayer);
+resetBtn.addEventListener("click", player.reset);
 
 function addPadding(num) {
   const stringNum = num.toString();
@@ -113,42 +116,65 @@ function addPadding(num) {
   }
 }
 
+function timeOut() {
+  return player.time.minutes == 0 && player.time.seconds == 0;
+}
 
-function decrementTime () {
-  if (player.time.seconds == 0) {
-    player.time.seconds = 59;
-    player.time.minutes--;
+player.decrementTime = () => {
+  if (timeOut() && player.onBreak) {
+    player.stop();
+  } else if (timeOut()) {
+    player.startBreak();
   } else {
-    player.time.seconds--;
+    if (player.time.seconds == 0) {
+      player.time.seconds = 59;
+      player.time.minutes--;
+    } else {
+      player.time.seconds--;
+    }
+  
+    player.updatePlayerTime();
   }
 
+}
+
+player.startBreak = () => {
+  console.log("Started Break");
+  player.onBreak = true;
+  sessionType.innerText = "Break";
+  player.time.minutes = player.breakTime;
+  player.time.seconds = 0;
   player.updatePlayerTime();
 }
 
-
-function play() {
+player.play = () => {
   player.isPlaying = true;
   player.interval = setInterval(function() {
-    decrementTime();
+    player.decrementTime();
   }, 1000);
   console.log("playing");
 }
 
-function pause() {
+player.pause = () => {
   clearInterval(player.interval);
   console.log("paused");
 }
 
-function stop() {
+player.stop = () => {
+  if (player.onBreak) {
+    player.onBreak = false;
+    sessionType.innerText = "Session";
+  }
+
   clearInterval(player.interval);
   player.isPlaying = false;
-  updateSessionTimeText();
+  player.updateSessionAndPlayerTime();
   console.log("stopped");
 }
 
-playBtn.addEventListener("click", play);
-pauseBtn.addEventListener("click", pause);
-stopBtn.addEventListener("click", stop);
+playBtn.addEventListener("click", player.play);
+pauseBtn.addEventListener("click", player.pause);
+stopBtn.addEventListener("click", player.stop);
 
 // initialize
-resetPlayer();
+player.reset();
