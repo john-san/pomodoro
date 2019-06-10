@@ -6,6 +6,8 @@
 
 body {
   font-size: 18px;
+  background: #E95547;
+  color: #fff;
 }
 i {
   font-size: 30px;
@@ -20,6 +22,10 @@ i {
   i {
     font-size: 42px;
   }
+}
+
+#session-time-holder, #break-time-holder {
+  font-weight: 700;
 }
 
 @media (min-width: 768px) {
