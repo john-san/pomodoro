@@ -177,14 +177,12 @@ player.pause = () => {
 }
 
 player.stop = () => {
-  if (player.isPlaying == true) {
-    player.quitBreak();
-    clearInterval(player.interval);
-    player.inSession = false;
-    player.isPlaying = false;
-    player.updateSessionAndPlayerTime();
-    console.log("stopped");
-  }
+  player.quitBreak();
+  clearInterval(player.interval);
+  player.inSession = false;
+  player.isPlaying = false;
+  player.updateSessionAndPlayerTime();
+  console.log("stopped");
 }
 
 
